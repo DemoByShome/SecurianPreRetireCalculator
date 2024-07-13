@@ -1,0 +1,26 @@
+{
+  "name": "securianpreretirecalculatorts",
+  "version": "1.0.0",
+  "description": "Test Framework to test Securian Pre-Retirement Calculator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "wdio": "wdio run ./wdio.conf.ts"
+  },
+  "keywords": [
+    "webdriverio",
+    "nodejs",
+    "cucumber",
+    "typescript"
+  ],
+  "author": "sarodwatshome@gmail.com",
+  "license": "ISC",
+  "devDependencies": {
+    "@wdio/allure-reporter": "^8.39.0",
+    "@wdio/cucumber-framework": "^8.39.0",
+    "@wdio/local-runner": "^8.39.1",
+    "@wdio/spec-reporter": "^8.39.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3"
+  }
+}
