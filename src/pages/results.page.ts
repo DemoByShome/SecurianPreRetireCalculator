@@ -1,5 +1,6 @@
 import { $,$$ } from '@wdio/globals';
 import Page from './page';
+import { click } from '../utils/common';
 
 class ResultsPage extends Page{
 
@@ -12,6 +13,8 @@ class ResultsPage extends Page{
     //Result message
     get paraResultMessage() { return $('p#result-message') }
 
+    get tdRetirementSavingsAmt() { return $('td#retirement-amount-results') }
+
     get plotMonthlySavings() { return $('canvas#results-chart') }
 
     get tableFullResults() { return $('table#detailed-results-table') }
@@ -21,6 +24,35 @@ class ResultsPage extends Page{
 
     get btnEditInfo() { return $('//button[contains(text(),"Edit")][contains(text(),"info") ]') }
     get btnSeeFullResults() { return $('//button[contains(text(),"See")][contains(text(),"full") ][contains(text(),"results") ]') }
+
+    async waitForResultsHeader() {
+        (await this.pageh3).waitForDisplayed({timeout: 10000})
+    }
+
+    async waitForResultsMessage(){
+        (await this.paraResultMessage).waitForDisplayed({timeout: 10000})
+    }
+
+    async waitForMonthlySavingsPlot(){
+        (await this.plotMonthlySavings).waitForEnabled({timeout: 10000})        
+    }
+
+    async getRetirementSavingsAmt(): Promise<string>{
+        (await this.tdRetirementSavingsAmt).waitForDisplayed({timeout: 10000}) 
+        return (await this.tdRetirementSavingsAmt).getText()
+    }
+
+    async clickOnBtnSeeFullResults(){
+        await click(this.btnSeeFullResults)
+    }
+
+    async waitForFullResultsTbl(){
+        (await this.tableFullResults).waitForDisplayed({timeout:10000})
+    }
+
+    async getNoOfFullResultsRows(): Promise<number>{
+        return (await this.rowsFullResults.length)
+    }
 
     openPRCCalculator(){
         return super.openPRCCalculator()

@@ -1,6 +1,6 @@
 import { $ } from '@wdio/globals'
 import Page from './page';
-import { logger, setText, setRadioBtn } from '../utils/common';
+import { setText, setRadioBtn, click } from '../utils/common';
 import { MaritalStatus } from '../utils/marital.status';
 
 class FrontPage extends Page{ 
@@ -45,15 +45,19 @@ class FrontPage extends Page{
         await setText(this.inputCurrAnnualSavings, currAnnualSavings)
         await setText(this.inputSavingsIncRate,savingsIncRate)
         if((typeof(maritalStatus) !== 'undefined') && (typeof(ssoOveride) !== 'undefined')) {
-            setRadioBtn(this.radioSSBYes)
+            await setRadioBtn(this.radioSSBYes)
             if(MaritalStatus.MARRIED === maritalStatus){ setRadioBtn(this.radioMarried) }                
             else if(MaritalStatus.SINGLE === maritalStatus){ setRadioBtn(this.radioSingle) }
             
-            setText(this.inputSSOveride, ssoOveride) 
+            await setText(this.inputSSOveride, ssoOveride) 
         }else{
-            setRadioBtn(this.radioSSBNo)
+            await setRadioBtn(this.radioSSBNo)
         }     
-    }   
+    } 
+    
+    async clickOnCalcButton(){
+        await click(this.btnCalculate)
+    }
          
     openPRCCalculator(){
         return super.openPRCCalculator()
