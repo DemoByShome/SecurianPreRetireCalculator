@@ -37,6 +37,10 @@ export const config: Options.Testrunner = {
     exclude: [
         // 'path/to/excluded/files'
     ],
+    suites: {
+        positive_scenarios: ['./test/features/positive_scenarios/*.feature'],
+        negative_scenarios: ['./test/features/negative_scenarios/*.feature']
+    },
     //
     // ============
     // Capabilities
