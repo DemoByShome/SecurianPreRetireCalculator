@@ -1,6 +1,5 @@
-import { $,$$ } from '@wdio/globals';
+import { $ } from '@wdio/globals';
 import Page from './page';
-import { click } from '../utils/common';
 
 class ResultsPage extends Page{
 
@@ -10,23 +9,26 @@ class ResultsPage extends Page{
     get pageh3() { return $('//h3[text()="Results"]') }
     get pageh4FullResults() { return $('//h4[text()="Full results"]') }
 
+    //Processing spinner 
+    get paraSpinnerText() { return $('p#calcSpinnerOnly-text') }
+
     //Result message
     get paraResultMessage() { return $('p#result-message') }
-
-    get tdRetirementSavingsAmt() { return $('td#retirement-amount-results') }
-
-    get plotMonthlySavings() { return $('canvas#results-chart') }
-
-    get tableFullResults() { return $('table#detailed-results-table') }
-
-    get rowsFullResults() { return $$('table#detailed-results-table>tbody>tr')}
     
-
+    //Plot & Massage showing the retirrement savings info
+    get plotMonthlySavings() { return $('canvas#results-chart') }
+    get tdRetirementSavingsAmt() { return $('td#retirement-amount-results') }
+    
+    //Buttons on the page
     get btnEditInfo() { return $('//button[contains(text(),"Edit")][contains(text(),"info") ]') }
-    get btnSeeFullResults() { return $('//button[contains(text(),"See")][contains(text(),"full") ][contains(text(),"results") ]') }
-
+    
+    //all wait functions
     async waitForResultsHeader() {
         (await this.pageh3).waitForDisplayed({timeout: 10000})
+    }
+
+    async waitTillProcessing(){
+        (await this.paraSpinnerText).waitForDisplayed({reverse: true, timeout: 10000})
     }
 
     async waitForResultsMessage(){
@@ -37,23 +39,11 @@ class ResultsPage extends Page{
         (await this.plotMonthlySavings).waitForEnabled({timeout: 10000})        
     }
 
-    async getRetirementSavingsAmt(): Promise<string>{
-        (await this.tdRetirementSavingsAmt).waitForDisplayed({timeout: 10000}) 
-        return (await this.tdRetirementSavingsAmt).getText()
-    }
+    async waitForRetirementSavingsAmt(){        
+        (await this.tdRetirementSavingsAmt).waitForEnabled({timeout: 10000})
+    }   
 
-    async clickOnBtnSeeFullResults(){
-        await click(this.btnSeeFullResults)
-    }
-
-    async waitForFullResultsTbl(){
-        (await this.tableFullResults).waitForDisplayed({timeout:10000})
-    }
-
-    async getNoOfFullResultsRows(): Promise<number>{
-        return (await this.rowsFullResults.length)
-    }
-
+    //default
     openPRCCalculator(){
         return super.openPRCCalculator()
     }

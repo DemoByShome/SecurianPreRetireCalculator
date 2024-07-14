@@ -1,0 +1,4 @@
+{
+  "using": "xpath",
+  "value": "//button[contains(text(),\"See\")][contains(text(),\"full\") ][contains(text(),\"results\") ]"
+}

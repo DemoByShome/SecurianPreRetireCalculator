@@ -13,7 +13,7 @@ class FrontPage extends Page{
     //Static
     get inputCurrentAge() { return $('input#current-age') }
     get inputRetirementAge() { return $('input#retirement-age') }
-    get inputCurrentIncome() { return $('inputcurrent-income') }
+    get inputCurrentIncome() { return $('input#current-income') }
     get inputSpouseIncome() { return $('input#spouse-income') }
     get inputCurrTotalSavings() { return $('input#current-total-savings') }
     get inputCurrAnnualSavings() { return $('input#current-annual-savings') }
@@ -35,6 +35,14 @@ class FrontPage extends Page{
 
     //Links on the page 
     get linkAdjDefaultVal() { return $('//a[text()="Adjust default values"]') }
+
+    async waitForPageH1(){
+        (await this.pageh1).waitForDisplayed({timeout:10000})        
+    }
+
+    async waitForPageH2(){
+        (await this.pageh2).waitForDisplayed({timeout:10000})
+    }    
 
     async enterGenericInfo(currentAge: string, retirementAge: string, currentIncome: string, spouseIncome: string, currTotalSavings: string, currAnnualSavings: string,  savingsIncRate: string, maritalStatus?: MaritalStatus, ssoOveride?: string){
         await setText(this.inputCurrentAge, currentAge)

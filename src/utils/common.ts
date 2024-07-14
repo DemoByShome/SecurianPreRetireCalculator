@@ -10,8 +10,12 @@ export const click = async(elem: ChainablePromiseElement<WebdriverIO.Element>) =
 }
 
 export const setRadioBtn = async(elem: ChainablePromiseElement<WebdriverIO.Element>) => {
-    await elem.click()
-    logger(`COMMON_UTILS:: Chosen radio button: ${await elem.selector}`)
+    if(await elem.isSelected()){
+        logger(`COMMON_UTILS:: Radio button already selected: ${await elem.selector}`)
+    }else{
+        await elem.click()
+        logger(`COMMON_UTILS:: Selected radio button: ${await elem.selector}`)
+    }    
 }
 
 export const setText = async(elem: ChainablePromiseElement<WebdriverIO.Element>, text: string) => {

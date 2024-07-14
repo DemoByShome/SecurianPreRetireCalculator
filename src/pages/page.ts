@@ -7,6 +7,7 @@ export default class Page{
     get pageh2() { return $('//h2[text()="Pre-retirement calculator"]') }
     
     openPRCCalculator(){
+        browser.maximizeWindow()        
         return browser.url('https://www.securian.com/insights-tools/retirement-calculator.html')
     }    
 }
