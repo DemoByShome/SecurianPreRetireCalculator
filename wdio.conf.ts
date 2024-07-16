@@ -31,15 +31,15 @@ export const config: Options.Testrunner = {
     //
     specs: [
         // ToDo: define location for spec files here
-        './test/features/positive_scenarios/positive.scenarios.feature'
+        './test/features/*.feature'
     ],
     // Patterns to exclude.
     exclude: [
         // 'path/to/excluded/files'
     ],
     suites: {
-        positive_scenarios: ['./test/features/positive_scenarios/*.feature'],
-        negative_scenarios: ['./test/features/negative_scenarios/*.feature']
+        positive_scenarios: ['./test/features/positive.scenarios.feature'],
+        negative_scenarios: ['./test/features/negative.scenarios.feature']
     },
     //
     // ============
@@ -142,7 +142,7 @@ export const config: Options.Testrunner = {
     // If you are using Cucumber you need to specify the location of your step definitions.
     cucumberOpts: {
         // <string[]> (file/dir) require files before executing features
-        require: ['./test/steps/positive.scenarios.ts'],
+        require: [''],
         // <boolean> show full backtrace for errors
         backtrace: false,
         // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)

@@ -1,6 +1,6 @@
 import { $ } from '@wdio/globals'
 import Page from './page';
-import { setText, setRadioBtn, setElementText, click } from '../utils/common';
+import { setText, setRadioBtn, setElementText, click, waitForDisplayed } from '../utils/common';
 import { MaritalStatus } from '../utils/marital.status';
 
 class FrontPage extends Page{ 
@@ -35,6 +35,17 @@ class FrontPage extends Page{
 
     //Links on the page 
     get linkAdjDefaultVal() { return $('//a[text()="Adjust default values"]') }
+
+    //Alerts  
+    get alertFillAllData() { return $('div#calculator-input-alert') }
+    get alertRetireAgeGreater() { return $('//input[@id="retirement-age"]//parent::div/div/span')}
+
+    //Alert Texts
+    get alertFillAllDataText() { return $('//div[@id="calculator-input-alert"]/p[text()="Please fill out all required fields"]')  }
+    get alertRetireAgeGreaterText() { return $('//input[@id="retirement-age"]//parent::div/div/span[text()="Planned retirement age must be greater than current age"]')}
+
+    //expectedAlertFillDataText = "Please fill out all required fields"
+    expectedRetireAgeAlertText = "Planned retirement age must be greater than current age"
 
     async waitForPageH1(){
         (await this.pageh1).waitForDisplayed({timeout:10000})        
@@ -80,6 +91,24 @@ class FrontPage extends Page{
     async editDefaultCalcValues(){
         (await this.linkAdjDefaultVal).click()
     }
+
+    async waitForAlertToFillData(){
+        await waitForDisplayed(this.alertFillAllData)
+    }
+
+    async verifyAlertToFillDataText(){
+        expect(await this.alertFillAllDataText).toExist
+    }
+
+    async waitForAlertRetireAgeGreater(){
+        await waitForDisplayed(this.alertRetireAgeGreater)
+    }
+
+    async verifyAlertRetireAgeGreaterText(){
+        expect(await this.alertRetireAgeGreaterText).toExist               
+    }
+
+    
 
     //defaults
     openPRCCalculator(){
