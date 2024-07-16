@@ -68,8 +68,13 @@ class FrontPage extends Page{
     } 
     
     async clickOnCalcButton(){
-        await click(this.btnCalculate)
-        //(await this.btnCalculate).click({x:100, y:15})
+        try{
+            await click(this.btnCalculate)
+        }catch(error){
+            if(error instanceof Error){
+                (await this.btnCalculate).click({x:100, y:15})
+            }else throw error           
+        }        
     }
 
     async editDefaultCalcValues(){
