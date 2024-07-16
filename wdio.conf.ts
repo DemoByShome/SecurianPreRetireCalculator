@@ -31,6 +31,7 @@ export const config: Options.Testrunner = {
     //
     specs: [
         // ToDo: define location for spec files here
+        //'./test/features/negative.scenarios.feature'
         './test/features/*.feature'
     ],
     // Patterns to exclude.
@@ -142,7 +143,8 @@ export const config: Options.Testrunner = {
     // If you are using Cucumber you need to specify the location of your step definitions.
     cucumberOpts: {
         // <string[]> (file/dir) require files before executing features
-        require: [''],
+        //require: ['./test/steps/negative.scenarios.ts'],
+        require: ['./test/steps/*.ts'],
         // <boolean> show full backtrace for errors
         backtrace: false,
         // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
