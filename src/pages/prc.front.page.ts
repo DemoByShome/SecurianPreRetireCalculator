@@ -1,6 +1,6 @@
 import { $ } from '@wdio/globals'
 import Page from './page';
-import { setText, setRadioBtn, setElementText, click, waitForDisplayed } from '../utils/common';
+import { setText, setRadioBtn, setElementText, click, waitForDisplayed, expectToExist } from '../utils/common';
 import { MaritalStatus } from '../utils/marital.status';
 
 class FrontPage extends Page{ 
@@ -97,7 +97,7 @@ class FrontPage extends Page{
     }
 
     async verifyAlertToFillDataText(){
-        expect(await this.alertFillAllDataText).toExist
+        await expectToExist(this.alertFillAllDataText)
     }
 
     async waitForAlertRetireAgeGreater(){
@@ -105,10 +105,8 @@ class FrontPage extends Page{
     }
 
     async verifyAlertRetireAgeGreaterText(){
-        expect(await this.alertRetireAgeGreaterText).toExist               
-    }
-
-    
+        expectToExist(this.alertRetireAgeGreaterText)               
+    }    
 
     //defaults
     openPRCCalculator(){
