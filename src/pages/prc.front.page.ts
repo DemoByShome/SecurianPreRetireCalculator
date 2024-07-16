@@ -1,6 +1,6 @@
 import { $ } from '@wdio/globals'
 import Page from './page';
-import { setText, setRadioBtn, click } from '../utils/common';
+import { setText, setRadioBtn, setElementText, click } from '../utils/common';
 import { MaritalStatus } from '../utils/marital.status';
 
 class FrontPage extends Page{ 
@@ -21,13 +21,13 @@ class FrontPage extends Page{
     //Dynamic
     get inputSSOveride() { return $('input#social-security-override') }
 
-    //Radio button to include Social Security Benefits
-    get radioSSBYes() { return $('input#yes-social-benefits[type=radio]') }
-    get radioSSBNo() { return $('input#no-social-benefits[type=radio]') }
+    //Radio button to include Social Security Benefits    
+    get radioSSBYes() { return $('input#yes-social-benefits') }      
+    get radioSSBNo() { return $('input#no-social-benefits') }
 
-    //Radio buttons to input marital status
-    get radioSingle() { return $('input#single[type=radio]') }
-    get radioMarried() { return $('input#married[type=radio]') }
+    //Radio buttons to input marital status    
+    get radioSingle() { return $('input#single') }
+    get radioMarried() { return $('input#married')  }
 
     //Buttons on the page
     get btnCalculate() { return $('//button[text()="Calculate"]') }
@@ -44,7 +44,7 @@ class FrontPage extends Page{
         (await this.pageh2).waitForDisplayed({timeout:10000})
     }    
 
-    async enterGenericInfo(currentAge: string, retirementAge: string, currentIncome: string, spouseIncome: string, currTotalSavings: string, currAnnualSavings: string,  savingsIncRate: string, maritalStatus?: MaritalStatus, ssoOveride?: string){
+    async enterGenericInfo(currentAge: string, retirementAge: string, currentIncome: string, spouseIncome: string, currTotalSavings: string, currAnnualSavings: string,  savingsIncRate: string, maritalStatus?: MaritalStatus, ssOveride?: string){
         await setText(this.inputCurrentAge, currentAge)
         await setText(this.inputRetirementAge, retirementAge)
         await setText(this.inputCurrentIncome, currentIncome)  
@@ -52,12 +52,16 @@ class FrontPage extends Page{
         await setText(this.inputCurrTotalSavings, currTotalSavings)
         await setText(this.inputCurrAnnualSavings, currAnnualSavings)
         await setText(this.inputSavingsIncRate,savingsIncRate)
-        if((typeof(maritalStatus) !== 'undefined') && (typeof(ssoOveride) !== 'undefined')) {
-            await setRadioBtn(this.radioSSBYes)
-            if(MaritalStatus.MARRIED === maritalStatus){ setRadioBtn(this.radioMarried) }                
-            else if(MaritalStatus.SINGLE === maritalStatus){ setRadioBtn(this.radioSingle) }
-            
-            await setText(this.inputSSOveride, ssoOveride) 
+        if((typeof(maritalStatus) !== 'undefined') && (typeof(ssOveride) !== 'undefined')) { 
+            (await this.radioSSBYes).click()
+            if(MaritalStatus.MARRIED === maritalStatus){ 
+                (await this.radioMarried).waitForEnabled({timeout: 5000});
+                (await this.radioMarried).click()
+            }                
+            else if(MaritalStatus.SINGLE === maritalStatus){ setRadioBtn(this.radioSingle) }             
+            if(ssOveride.trim.length != 0){                       
+            await setElementText(this.inputSSOveride, ssOveride)
+            }
         }else{
             await setRadioBtn(this.radioSSBNo)
         }     
@@ -65,11 +69,21 @@ class FrontPage extends Page{
     
     async clickOnCalcButton(){
         await click(this.btnCalculate)
+        //(await this.btnCalculate).click({x:100, y:15})
     }
-         
+
+    async editDefaultCalcValues(){
+        (await this.linkAdjDefaultVal).click()
+    }
+
+    //defaults
     openPRCCalculator(){
         return super.openPRCCalculator()
-    }   
+    }
+
+    closeBrowser(): void {
+        return super.closeWindow()
+    }
 
 }
 

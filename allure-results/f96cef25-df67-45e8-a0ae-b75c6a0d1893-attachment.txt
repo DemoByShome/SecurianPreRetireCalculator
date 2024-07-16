@@ -1,0 +1,4 @@
+{
+  "using": "css selector",
+  "value": "input#yes-social-benefits[type=radio]"
+}

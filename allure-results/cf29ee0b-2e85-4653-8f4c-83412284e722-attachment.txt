@@ -1,0 +1,49 @@
+{
+  "actions": [
+    {
+      "id": "action1",
+      "type": "pointer",
+      "parameters": {
+        "pointerType": "mouse"
+      },
+      "actions": [
+        {
+          "type": "pointerMove",
+          "button": 0,
+          "width": 0,
+          "height": 0,
+          "pressure": 0,
+          "tangentialPressure": 0,
+          "tiltX": 0,
+          "tiltY": 0,
+          "twist": 0,
+          "altitudeAngle": 0,
+          "azimuthAngle": 0,
+          "x": 1,
+          "y": 1,
+          "duration": 100,
+          "origin": {
+            "element-6066-11e4-a52e-4f735466cecf": "f.AF95BC163C1F7052F0D0F3C1D8C66702.d.D3A0E21912AE712E1C57646A2ED86517.e.98"
+          }
+        },
+        {
+          "type": "pointerDown",
+          "button": 0,
+          "width": 0,
+          "height": 0,
+          "pressure": 0,
+          "tangentialPressure": 0,
+          "tiltX": 0,
+          "tiltY": 0,
+          "twist": 0,
+          "altitudeAngle": 0,
+          "azimuthAngle": 0
+        },
+        {
+          "type": "pointerUp",
+          "button": 0
+        }
+      ]
+    }
+  ]
+}

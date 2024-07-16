@@ -1,0 +1,5 @@
+{
+  "error": "no such element",
+  "message": "no such element: Unable to locate element: {\"method\":\"css selector\",\"selector\":\"input#yes-social-benefits\"}\n  (Session info: chrome=126.0.6478.127)",
+  "stacktrace": "\tGetHandleVerifier [0x00007FF7F2C3EEC2+31554]\n\t(No symbol) [0x00007FF7F2BB7EF9]\n\t(No symbol) [0x00007FF7F2A7872A]\n\t(No symbol) [0x00007FF7F2AC8434]\n\t(No symbol) [0x00007FF7F2AC853C]\n\t(No symbol) [0x00007FF7F2B0F6A7]\n\t(No symbol) [0x00007FF7F2AED06F]\n\t(No symbol) [0x00007FF7F2B0C977]\n\t(No symbol) [0x00007FF7F2AECDD3]\n\t(No symbol) [0x00007FF7F2ABA33B]\n\t(No symbol) [0x00007FF7F2ABAED1]\n\tGetHandleVerifier [0x00007FF7F2F48B5D+3217373]\n\tGetHandleVerifier [0x00007FF7F2F95B23+3532707]\n\tGetHandleVerifier [0x00007FF7F2F8B120+3489184]\n\tGetHandleVerifier [0x00007FF7F2CEE796+750614]\n\t(No symbol) [0x00007FF7F2BC377F]\n\t(No symbol) [0x00007FF7F2BBEB34]\n\t(No symbol) [0x00007FF7F2BBECC2]\n\t(No symbol) [0x00007FF7F2BAE18F]\n\tBaseThreadInitThunk [0x00007FFF002653E0+16]\n\tRtlUserThreadStart [0x00007FFF0050485B+43]\n"
+}

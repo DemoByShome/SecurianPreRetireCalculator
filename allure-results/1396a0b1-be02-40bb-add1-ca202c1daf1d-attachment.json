@@ -1,0 +1,1 @@
+<input type="text" id="social-security-override" placeholder="$ Monthly amount in today's dollars" data-inputmask-alias="retirementCalcCurrency" onfocus="onFocusHandler(this);" onblur="onBlurHandler(this);" autocomplete="on" inputmode="numeric">

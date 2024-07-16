@@ -1,5 +1,6 @@
 import { $ } from '@wdio/globals';
 import Page from './page';
+import { waitForDisplayed, waitTillDisappear} from '../utils/common';
 
 class ResultsPage extends Page{
 
@@ -23,29 +24,19 @@ class ResultsPage extends Page{
     get btnEditInfo() { return $('//button[contains(text(),"Edit")][contains(text(),"info") ]') }
     
     //all wait functions
-    async waitForResultsHeader() {
-        (await this.pageh3).waitForDisplayed({timeout: 10000})
+    async waitTillThePageLoads(){        
+        (await this.pageh3).waitForExist({timeout:10000})
+        await waitForDisplayed(this.pageh3)
+        await waitTillDisappear(this.paraSpinnerText)
+        //await waitForDisplayed(this.paraResultMessage)
+        await waitForDisplayed(this.plotMonthlySavings)
+        await waitForDisplayed(this.tdRetirementSavingsAmt)
     }
+       
 
-    async waitTillProcessing(){
-        (await this.paraSpinnerText).waitForDisplayed({reverse: true, timeout: 10000})
-    }
-
-    async waitForResultsMessage(){
-        (await this.paraResultMessage).waitForDisplayed({timeout: 10000})
-    }
-
-    async waitForMonthlySavingsPlot(){
-        (await this.plotMonthlySavings).waitForEnabled({timeout: 10000})        
-    }
-
-    async waitForRetirementSavingsAmt(){        
-        (await this.tdRetirementSavingsAmt).waitForEnabled({timeout: 10000})
-    }   
-
-    //default
-    openPRCCalculator(){
-        return super.openPRCCalculator()
+    //defaults
+    closeWindow(): void {
+       return super.closeWindow()
     }
 }
 

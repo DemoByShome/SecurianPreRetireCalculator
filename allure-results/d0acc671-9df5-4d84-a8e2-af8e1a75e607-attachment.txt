@@ -1,0 +1,5 @@
+{
+  "error": "no such element",
+  "message": "no such element: Unable to locate element: {\"method\":\"css selector\",\"selector\":\"[name=\"marital-status\"]:nth-child(2)\"}\n  (Session info: chrome=126.0.6478.127)",
+  "stacktrace": "\tGetHandleVerifier [0x00007FF79F89EEC2+31554]\n\t(No symbol) [0x00007FF79F817EF9]\n\t(No symbol) [0x00007FF79F6D872A]\n\t(No symbol) [0x00007FF79F728434]\n\t(No symbol) [0x00007FF79F72853C]\n\t(No symbol) [0x00007FF79F76F6A7]\n\t(No symbol) [0x00007FF79F74D06F]\n\t(No symbol) [0x00007FF79F76C977]\n\t(No symbol) [0x00007FF79F74CDD3]\n\t(No symbol) [0x00007FF79F71A33B]\n\t(No symbol) [0x00007FF79F71AED1]\n\tGetHandleVerifier [0x00007FF79FBA8B5D+3217373]\n\tGetHandleVerifier [0x00007FF79FBF5B23+3532707]\n\tGetHandleVerifier [0x00007FF79FBEB120+3489184]\n\tGetHandleVerifier [0x00007FF79F94E796+750614]\n\t(No symbol) [0x00007FF79F82377F]\n\t(No symbol) [0x00007FF79F81EB34]\n\t(No symbol) [0x00007FF79F81ECC2]\n\t(No symbol) [0x00007FF79F80E18F]\n\tBaseThreadInitThunk [0x00007FFF002653E0+16]\n\tRtlUserThreadStart [0x00007FFF0050485B+43]\n"
+}
