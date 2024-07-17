@@ -23,7 +23,10 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
-        "baseUrl": "."
+        "paths":{
+            "resources": ["./resources/*"]
+        }
+               
     },
     "include": [
         "test",

@@ -1,0 +1,4 @@
+{
+  "using": "xpath",
+  "value": "//input[@id=\"retirement-age\"]//parent::div/div/span"
+}

@@ -1,8 +1,10 @@
 import { $ } from '@wdio/globals';
 import Page from './page';
-import { waitForDisplayed, waitTillDisappear} from '../utils/common';
+import { logger, waitForDisplayed, waitTillDisappear} from '../utils/common';
 
 class ResultsPage extends Page{
+
+    LOG_IDENTIFIER = "RESULTS_PAGE::"
 
     //Standard page headers
     get pageh1() { return super.pageh1 }
@@ -24,19 +26,20 @@ class ResultsPage extends Page{
     get btnEditInfo() { return $('//button[contains(text(),"Edit")][contains(text(),"info") ]') }
     
     //all wait functions
-    async waitTillResultDisplayed(){        
+    async waitTillResultDisplayed(){                
         (await this.pageh3).waitForExist({timeout:10000})
         await waitForDisplayed(this.pageh3)
         await waitTillDisappear(this.paraSpinnerText)
         //await waitForDisplayed(this.paraResultMessage)
         await waitForDisplayed(this.plotMonthlySavings)
         await waitForDisplayed(this.tdRetirementSavingsAmt)
+        logger(this.LOG_IDENTIFIER + `The Retirement Calculation Results are now available on the Results Page.`)
     }
        
 
     //defaults
-    closeWindow(): void {
-       return super.closeWindow()
+    async closeWindow(){
+       return await super.closeBrowserWindow()
     }
 }
 

@@ -1,9 +1,11 @@
 import { $ } from '@wdio/globals'
 import Page from './page';
-import { setText, click, waitForDisplayed, expectToExist } from '../utils/common';
+import { setText, click, waitForDisplayed, expectToExist, logger } from '../utils/common';
 import { parseJsonFile } from '../utils/fileUtils'
 
 class CalculatorPage extends Page{ 
+
+    LOG_IDENTIFIER = "CALCULATOR_PAGE::"
     
     //Standard page headers
     get pageh1() { return super.pageh1 }
@@ -73,24 +75,27 @@ class CalculatorPage extends Page{
 
     //function to enter values into the mandatiory fields of the calculator page
     //return type: void 
-    async enterUserInfo(customerDataFile: string){
+    async enterUserInfo(customerDataFile: string){               
         let dataJSON = parseJsonFile(customerDataFile)
+        logger(this.LOG_IDENTIFIER + `Test data captured from file: ` + customerDataFile)
+        logger(this.LOG_IDENTIFIER + `Test data entry started for the mandatory fields on the page.`)
         await setText(this.inputCurrentAge, dataJSON.currentAge)
         await setText(this.inputRetirementAge, dataJSON.retirementAge)
         await setText(this.inputCurrentIncome, dataJSON.currentAnnualIncome)  
         await setText(this.inputSpouseIncome, dataJSON.spouseAnnualIncome)
         await setText(this.inputCurrTotalSavings, dataJSON.currentRetirementSavings)
         await setText(this.inputCurrAnnualSavings, dataJSON.annualSavingsPercentage)
-        await setText(this.inputSavingsIncRate, dataJSON.savingsIncreaseRate)             
+        await setText(this.inputSavingsIncRate, dataJSON.savingsIncreaseRate) 
+        logger(this.LOG_IDENTIFIER + `Test data entry completed for the mandatory fields on the page.`)            
     } 
     
     //function to click on Calculate button
     //return type: void
     async clickOnCalcButton(){
         try{
-            await click(this.btnCalculate)
-        }catch(error){
-            if(error instanceof Error){
+            await click(this.btnCalculate)            
+        }catch(error){            
+            if(error instanceof Error){                
                 (await this.btnCalculate).click({x:100, y:15})
             }else throw error           
         }        
@@ -99,31 +104,40 @@ class CalculatorPage extends Page{
     //function to click on the link to enable the dialog to modify default calculator values
     //return type: void 
     async editDefaultCalcValues(){
-        (await this.linkAdjDefaultVal).click()
+        await click(this.linkAdjDefaultVal)
+        logger(this.LOG_IDENTIFIER + `Clicked on ${await this.linkAdjDefaultVal.selector} to modify default calculator values.`) 
     }
 
     //function to wait until the alert to fill all mandatory data appears on the pre-retitement calculator page
     //return type: void
     async waitForAlertToFillData(){
-        await waitForDisplayed(this.alertFillAllData)
+        logger(this.LOG_IDENTIFIER + `Waiting for ${await this.alertFillAllData.selector} to be displayed.`)
+        await waitForDisplayed(this.alertFillAllData)        
     }
 
     //function to verify whether the alert to fill all mandatory data appears with the alert text
     //return type: void
     async verifyAlertToFillDataText(){
+        logger(this.LOG_IDENTIFIER + `Waiting for ${await this.alertFillAllData.selector} to be displayed.`)
+        await this.waitForAlertToFillData()
+        logger(this.LOG_IDENTIFIER + `Waiting for ${await this.alertFillAllDataText.selector} to be displayed.`)       
         await expectToExist(this.alertFillAllDataText)
     }
 
     //function to wait util the Alert to enter retirement age greater than current age appears
     //return type: void 
     async waitForAlertRetireAgeGreater(){
+        logger(this.LOG_IDENTIFIER + `Waiting for ${await this.alertRetireAgeGreater.selector} to be displayed.`)
         await waitForDisplayed(this.alertRetireAgeGreater)
     }
 
     //function to verify the text of the alert to enter retirement age greater than current age appears with the alert  
     //return type: void
     async verifyAlertRetireAgeGreaterText(){
-        expectToExist(this.alertRetireAgeGreaterText)               
+        logger(this.LOG_IDENTIFIER + `Waiting for ${await this.alertRetireAgeGreater.selector} to be displayed.`)
+        await this.waitForAlertRetireAgeGreater()
+        logger(this.LOG_IDENTIFIER + `Waiting for ${await this.alertRetireAgeGreaterText.selector} to be displayed.`)
+        await expectToExist(this.alertRetireAgeGreaterText)               
     }
     
     //Default calculator dialog functions
@@ -131,6 +145,7 @@ class CalculatorPage extends Page{
     //function to wait until the dialog to modify default calculator values loads
     //return type: void
     async waitForDefCalcDialogLoad(){
+        logger(this.LOG_IDENTIFIER + `Waiting for Dialog with fields for default calculator values to be displayed.`)
         waitForDisplayed(this.defCalcHeader)
     }    
 
@@ -138,17 +153,25 @@ class CalculatorPage extends Page{
     //return type: void
     async fillDefaultCalcVal(dataFile: string){
         let dataJSON = parseJsonFile(dataFile)
+        logger(this.LOG_IDENTIFIER + `Test data captured from file: ` + dataFile)
+        logger(this.LOG_IDENTIFIER + `Test data entry started for the mandatory fields on the Default Calculator Values dialog.`)
+        this.editDefaultCalcValues()
+        this.waitForDefCalcDialogLoad()
         setText(this.inputAddlIncome, dataJSON.otherIncome)
         setText(this.inputRetDuration, dataJSON.yearsToDepend)
         setText(this.inputRetAnnualIncome, dataJSON.finalIncomePostRetire)
         setText(this.inputPreRetireInvReturn, dataJSON.preRetireInvReturn)
-        setText(this.inputPostRetireInvReturn, dataJSON.postRetireInvReturn)        
+        setText(this.inputPostRetireInvReturn, dataJSON.postRetireInvReturn) 
+        
+        this.clickBtnSaveChanges()
+        logger(this.LOG_IDENTIFIER + `Test data entry completed for the mandatory fields on the Default Calculator Values dialog.`)               
     }
 
     //function to click on button Save Changes on the dialog to modify default calculator values
     //return type: void
-    async clickBtnSaveChanges(){
+    async clickBtnSaveChanges(){        
         click(this.btnSaveChanges)
+        logger(this.LOG_IDENTIFIER + `Clicked on element: ${await this.btnSaveChanges.selector}`)
     }
 
     //defaults inherited functions
@@ -167,8 +190,8 @@ class CalculatorPage extends Page{
 
     //function to close the browser window
     //return type: void
-    closeBrowser(): void {
-        return super.closeWindow()
+    async closeBrowserWindow(){
+        return await super.closeBrowserWindow()
     }
 
 }

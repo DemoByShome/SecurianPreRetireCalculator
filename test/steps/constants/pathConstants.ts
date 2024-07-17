@@ -1,1 +1,1 @@
-export const RESOURCE_FOLDER = "../../resources/";
+export const RESOURCE_FOLDER = "./resources/";

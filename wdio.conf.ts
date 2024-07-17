@@ -32,7 +32,7 @@ export const config: Options.Testrunner = {
     specs: [
         // ToDo: define location for spec files here
         //'./test/features/negative.scenarios.feature'
-        './test/features/positive.scenarios.feature'
+        './test/features/negative.scenarios.feature'
     ],
     // Patterns to exclude.
     exclude: [
@@ -75,7 +75,7 @@ export const config: Options.Testrunner = {
     // Define all options that are relevant for the WebdriverIO instance here
     //
     // Level of logging verbosity: trace | debug | info | warn | error | silent
-    logLevel: 'info',
+    logLevel: 'error', 
     //
     // Set specific log levels per logger
     // loggers:
@@ -144,7 +144,7 @@ export const config: Options.Testrunner = {
     cucumberOpts: {
         // <string[]> (file/dir) require files before executing features
         //require: ['./test/steps/negative.scenarios.ts'],
-        require: ['./test/steps/positive.scenarios.ts'],
+        require: ['./test/steps/negative.scenarios.ts'],
         // <boolean> show full backtrace for errors
         backtrace: false,
         // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
