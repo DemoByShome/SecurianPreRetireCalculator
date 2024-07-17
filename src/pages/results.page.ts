@@ -24,7 +24,7 @@ class ResultsPage extends Page{
     get btnEditInfo() { return $('//button[contains(text(),"Edit")][contains(text(),"info") ]') }
     
     //all wait functions
-    async waitTillThePageLoads(){        
+    async waitTillResultDisplayed(){        
         (await this.pageh3).waitForExist({timeout:10000})
         await waitForDisplayed(this.pageh3)
         await waitTillDisappear(this.paraSpinnerText)
