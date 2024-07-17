@@ -11,8 +11,7 @@ When(`User submits the form`, async function(){
     await CalculatorPage.clickOnCalcButton()
 });
 
-Then(`User should see an error message asking the user to fill all required fields.`, async () => {
-    await CalculatorPage.waitForAlertToFillData()
+Then(`User should see an error message asking the user to fill all required fields.`, async () => {    
     await CalculatorPage.verifyAlertToFillDataText()
 });
 
