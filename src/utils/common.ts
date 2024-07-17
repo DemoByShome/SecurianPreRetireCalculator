@@ -61,8 +61,3 @@ export const expectToExist = async(elem: ChainablePromiseElement<WebdriverIO.Ele
     expect(await elem).toExist
     logger(`COMMON_UTILS:: Webelement ${await elem.selector} is exists on the page.`)
 }
-
-
-
-
-

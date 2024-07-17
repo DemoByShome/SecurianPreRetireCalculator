@@ -1,29 +1,22 @@
-import { Given, When, Then} from '@wdio/cucumber-framework';
-import FrontPage from '../../src/pages/prc.front.page';
+import { Given, When, Then } from '@wdio/cucumber-framework';
+import CalculatorPage from '../../src/pages/calculator.page';
+import { RESOURCE_FOLDER } from './constants/pathConstants';
 
-Given(`I am on the front page`, async() => {
-    await browser.refresh()
-    await browser.maximizeWindow()
-    await FrontPage.openPRCCalculator()        
-    
-    await FrontPage.waitForPageH1()
-    await FrontPage.waitForPageH2()
+Given(`User fills all mandatory fields at the pre-retirement calculator from {string}`, async (dataFile: string) => {
+    await CalculatorPage.openPRCCalculator()
+    await CalculatorPage.enterUserInfo(RESOURCE_FOLDER + dataFile)
 });
 
-When(`I enter my {string},{string},{string},{string}, {string}, {string} and {string}`, async (currentAge: string, retirementAge: string, currentIncome: string, spouseIncome: string, currTotalSavings: string, currAnnualSavings: string, savingsIncRate: string) => {
-    await FrontPage.enterGenericInfo(currentAge, retirementAge, currentIncome, spouseIncome, currTotalSavings, currAnnualSavings, savingsIncRate)
+When(`User submits the form`, async function(){
+    await CalculatorPage.clickOnCalcButton()
 });
 
-When(`Press the Calculate button`, async () => {    
-    await FrontPage.clickOnCalcButton()            
+Then(`User should see an error message asking the user to fill all required fields.`, async () => {
+    await CalculatorPage.waitForAlertToFillData()
+    await CalculatorPage.verifyAlertToFillDataText()
 });
 
-Then(`The alert to fill all required fields should appear`, async () => {
-    await FrontPage.waitForAlertToFillData()
-    await FrontPage.verifyAlertToFillDataText()
-});
-
-Then(`A alert text should appear under test box to fill retirement age`, async () => {
-    await FrontPage.waitForAlertRetireAgeGreater()
-    await FrontPage.verifyAlertRetireAgeGreaterText()
+Then(`User will get error message as planned retirement age must be greater than current age under the field to enter retirement age`, async () => {
+    await CalculatorPage.waitForAlertRetireAgeGreater()
+    await CalculatorPage.verifyAlertRetireAgeGreaterText()
 });
