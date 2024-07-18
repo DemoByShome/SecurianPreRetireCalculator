@@ -1,0 +1,4 @@
+{
+  "using": "xpath",
+  "value": "//input[@id=\"retirement-age\"]//parent::div/div/span[text()=\"Planned retirement age must be greater than current age\"]"
+}
