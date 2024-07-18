@@ -1,1 +1,0 @@
-<input type="text" id="additional-income" placeholder="$" data-inputmask-alias="retirementCalcCurrency" onfocus="onFocusHandler(this);" onblur="onBlurHandler(this);" autocomplete="on" inputmode="numeric">

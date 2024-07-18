@@ -1,4 +1,0 @@
-{
-  "using": "xpath",
-  "value": "//div[@id=\"calculator-input-alert\"]/p[text()=\"Please fill out all required fields\"]"
-}

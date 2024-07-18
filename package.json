@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "wdio": "wdio run ./wdio.conf.ts",
     "positive_scenarios": "npx wdio ./wdio.conf.ts --suite positive_scenarios --cucumberOpts:require './test/steps/positive.scenarios.ts'",
-    "negative_scenarios": "npx wdio ./wdio.conf.ts --suite negative_scenarios --cucumberOpts:require './test/steps/negative.scenarios.ts'"
+    "negative_scenarios": "npx wdio ./wdio.conf.ts --suite negative_scenarios --cucumberOpts:require './test/steps/negative.scenarios.ts'",
+    "generate_report": "allure generate allure-results --clean",
+    "launch_report": "allure open"
   },
   "keywords": [
     "webdriverio",
@@ -25,7 +27,7 @@
     "allure-commandline": "^2.29.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3",
-    "wdio-chromedriver-service": "^8.1.1"
+    "wdio-chromedriver-service": "^8.1.1"    
   },
   "dependencies": {
     "chromedriver": "^126.0.4",
