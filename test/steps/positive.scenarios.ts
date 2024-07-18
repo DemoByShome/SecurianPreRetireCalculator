@@ -8,8 +8,17 @@ Given(`User fills all mandatory fields at the pre-retirement calculator from {st
     await CalculatorPage.enterUserInfo(RESOURCE_FOLDER + dataFile)
 });
 
+Given(`User fills all mandatory fields at the pre-retirement calculator with social sucurity option from {string}`, async (dataFile: string) => {
+    await CalculatorPage.openPRCCalculator()
+    await CalculatorPage.enterUserInfoWithSSBenefit(RESOURCE_FOLDER + dataFile)
+});
+
 Given(`User modifies the default calculator values from {string}`, async (dataFile: string) => {
     await CalculatorPage.fillDefaultCalcVal(RESOURCE_FOLDER + dataFile)
+});
+
+Given(`User modifies the default calculator values from {string} including Inflation details`, async (dataFile: string) => {
+    await CalculatorPage.fillDefaultCalcValIncInflation(RESOURCE_FOLDER + dataFile)
 });
 
 When(`User submits the form`, async () => {
