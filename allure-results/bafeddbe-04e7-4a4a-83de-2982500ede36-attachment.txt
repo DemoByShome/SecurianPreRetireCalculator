@@ -1,4 +1,0 @@
-{
-  "using": "xpath",
-  "value": "//a[text()=\"Adjust default values\"]"
-}

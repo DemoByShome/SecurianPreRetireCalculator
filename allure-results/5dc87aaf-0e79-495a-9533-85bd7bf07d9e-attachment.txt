@@ -1,6 +1,0 @@
-{
-  "script": "return ((selector) => {\n                const element = document.querySelector(selector);\n                if (element) {\n                    element.remove();\n                }\n            }).apply(null, arguments)",
-  "args": [
-    "input#yes-social-benefits"
-  ]
-}

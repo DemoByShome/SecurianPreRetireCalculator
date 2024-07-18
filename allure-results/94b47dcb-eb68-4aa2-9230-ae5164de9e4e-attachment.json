@@ -1,1 +1,0 @@
-<input type="text" id="post-retirement-roi" placeholder="%" data-inputmask-alias="roiPercentage" onfocus="onFocusHandler(this);" onblur="onBlurHandler(this);" autocomplete="on" inputmode="numeric">

@@ -1,9 +1,11 @@
 import {ChainablePromiseElement} from "webdriverio";
+import report from '@wdio/allure-reporter';
 
 const LOG_IDENTIFIER = "COMMON_UTILS:: "
 
 export const logger = (input: string) => {
     console.log(`STEP: ${input}`)
+    report.addStep(`STEP: ${input}`)
 }
 
 export const click = async(elem: ChainablePromiseElement<WebdriverIO.Element>) => {

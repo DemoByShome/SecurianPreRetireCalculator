@@ -12,3 +12,11 @@ export const parseJsonFile = (datapath:string)=> {
     logger(LOG_IDENTIFIER + "JSON:" + data)
     return JSON.parse(data)
 }
+
+
+export const deleteDirectory = (path: string)=> {
+    if(fs.existsSync(path)) {
+        fs.rmdirSync(path, {recursive: true})
+        logger(LOG_IDENTIFIER + `Directory Deleted: ${path}`)
+    }
+}

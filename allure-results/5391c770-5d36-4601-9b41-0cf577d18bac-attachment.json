@@ -1,4 +1,0 @@
-<li role="presentation">
-                                    <input type="radio" name="marital-status" id="married" value="M">
-                                    <label for="married">Married</label>
-                                </li>

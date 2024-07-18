@@ -1,4 +1,10 @@
 import type { Options } from '@wdio/types'
+import { logger } from './src/utils/common'
+import * as os from "os";
+import { deleteDirectory } from './src/utils/fileUtils';
+
+let LOG_IDENTIFIER = "WDIO_CONFIG:: ";
+
 export const config: Options.Testrunner = {
     //
     // ====================
@@ -31,7 +37,9 @@ export const config: Options.Testrunner = {
     //
     specs: [
         // ToDo: define location for spec files here
-        './test/features/*.feature'
+        './test/features/positive.scenarios.feature'
+        //'./test/features/negative.scenarios.feature'
+        //'./test/features/*.scenarios.feature'
     ],
     // Patterns to exclude.
     exclude: [
@@ -139,15 +147,22 @@ export const config: Options.Testrunner = {
     // see also: https://webdriver.io/docs/dot-reporter
     reporters: ['spec',['allure', {outputDir: 'allure-results',
         disableWebdriverStepsReporting: true,
-        disableWebdriverScreenshotsReporting: true,
-        useCucumberStepReporter: true
+        disableWebdriverScreenshotsReporting: false,
+        useCucumberStepReporter: true,
+        reportedEnvironmentVars:{
+            os_platform: os.platform(),
+            os_release: os.release(),
+            os_version: os.version(),
+            node_version: process.version,
+          }
     }]],
 
     // If you are using Cucumber you need to specify the location of your step definitions.
     cucumberOpts: {
         // <string[]> (file/dir) require files before executing features
         //require: ['./test/steps/negative.scenarios.ts'],
-        require: ['./test/steps/*.ts'],
+        require: ['./test/steps/positive.scenarios.ts'],
+        //require: ['./test/steps/*.scenarios.ts'],
         // <boolean> show full backtrace for errors
         backtrace: false,
         // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
@@ -186,8 +201,9 @@ export const config: Options.Testrunner = {
      * @param {object} config wdio configuration object
      * @param {Array.<Object>} capabilities list of capabilities details
      */
-    // onPrepare: function (config, capabilities) {
-    // },
+    onPrepare: function () {
+        deleteDirectory('allure-results')        
+    },    
     /**
      * Gets executed before a worker process is spawned and can be used to initialize specific service
      * for that worker as well as modify runtime environments in an async fashion.
@@ -271,8 +287,13 @@ export const config: Options.Testrunner = {
      * @param {number}             result.duration  duration of scenario in milliseconds
      * @param {object}             context          Cucumber World object
      */
-    // afterStep: function (step, scenario, result, context) {
-    // },
+    afterStep: async function (step, scenario, result) {
+        if(!result.passed){
+            await browser.takeScreenshot();
+            logger(LOG_IDENTIFIER + "Secnario '"+ scenario.name + "'failed exection")
+            logger(LOG_IDENTIFIER + "Step ID'" + step.id + "' failed")
+        }
+    },
     /**
      *
      * Runs after a Cucumber Scenario.
@@ -291,8 +312,8 @@ export const config: Options.Testrunner = {
      * @param {string}                   uri      path to feature file
      * @param {GherkinDocument.IFeature} feature  Cucumber feature object
      */
-    // afterFeature: function (uri, feature) {
-    // },
+    //afterFeature: function (uri, feature) {        
+    //},,
     
     /**
      * Runs after a WebdriverIO command gets executed
