@@ -1,7 +1,8 @@
 import { $ } from '@wdio/globals'
 import Page from './page';
-import { setText, click, waitForDisplayed, expectToExist, logger } from '../utils/common';
+import { setText, click, waitForDisplayed, expectToExist, logger, setRadioBtn } from '../utils/common';
 import { parseJsonFile } from '../utils/fileUtils'
+import { MaritalStatus } from '../enums/marital.status'
 
 class CalculatorPage extends Page{ 
 
@@ -23,13 +24,13 @@ class CalculatorPage extends Page{
     //Dynamic
     get inputSSOveride() { return $('input#social-security-override') }
 
-    //Radio button to include Social Security Benefits    
-    get radioSSBYes() { return $('input#yes-social-benefits') }      
-    get radioSSBNo() { return $('input#no-social-benefits') }
+    //Radio button to include Social Security Benefits          
+    get radioSSBYes() { return $('//ul[@aria-labelledby="include-social-label"]/li/label[@for="yes-social-benefits"]')}  
+    get radioSSBNo() { return $('//ul[@aria-labelledby="include-social-label"]/li/label[@for="no-social-benefits"]') }
 
     //Radio buttons to input marital status    
-    get radioSingle() { return $('input#single') }
-    get radioMarried() { return $('input#married')  }
+    get radioSingle() { return $('//ul[@id="marital-status-ul"]/li/label[@for="single"]') }    
+    get radioMarried() { return $('//ul[@id="marital-status-ul"]/li/label[@for="married"]')  }
 
     //Buttons on the page
     get btnCalculate() { return $('//button[text()="Calculate"]') }
@@ -58,14 +59,14 @@ class CalculatorPage extends Page{
     //inputs on the dialog
     get inputAddlIncome() { return $('input#additional-income') }
     get inputRetDuration() { return $('input#retirement-duration') }
-    get inputExpInflationRate() { return $('input#expected-inflation-rate') }
+    get inputExpInflationRate() { return $('//div[@id="expected-inflation-rate-div"]/div/div/input') }
     get inputRetAnnualIncome() { return $('input#retirement-annual-income') }
     get inputPreRetireInvReturn() { return $('input#pre-retirement-roi') }
     get inputPostRetireInvReturn() { return $('input#post-retirement-roi') }
 
     //radio buttons at the dialog
-    get radioIncludeInflation() { return $('input#include-inflation') }
-    get radioExcludeInflation() { return $('input#exclude-inflation') }
+    get radioIncludeInflation() { return $('//ul[@aria-labelledby="inflation-label"]/li/label[@for="include-inflation"]') }
+    get radioExcludeInflation() { return $('//ul[@aria-labelledby="inflation-label"]/li/label[@for="exclude-inflation"]') }
 
     //buttons at the dialog
     get btnSaveChanges() { return $('//button[text()="Save changes"]') }
@@ -85,9 +86,38 @@ class CalculatorPage extends Page{
         await setText(this.inputSpouseIncome, dataJSON.spouseAnnualIncome)
         await setText(this.inputCurrTotalSavings, dataJSON.currentRetirementSavings)
         await setText(this.inputCurrAnnualSavings, dataJSON.annualSavingsPercentage)
-        await setText(this.inputSavingsIncRate, dataJSON.savingsIncreaseRate) 
+        await setText(this.inputSavingsIncRate, dataJSON.savingsIncreaseRate)           
+
         logger(this.LOG_IDENTIFIER + `Test data entry completed for the mandatory fields on the page.`)            
     } 
+
+    /*function to enter values into the mandatiory fields of the calculator page 
+    with Social Security Benefits = Yes*/
+    //return type: void 
+    async enterUserInfoWithSSBenefit(customerDataFile: string){
+        let dataJSON = parseJsonFile(customerDataFile)
+        logger(this.LOG_IDENTIFIER + `Test data captured from file: ` + customerDataFile)
+        logger(this.LOG_IDENTIFIER + `Test data entry started for the mandatory fields on the page 
+            with Social Security Benefits = Yes.`)
+        await setText(this.inputCurrentAge, dataJSON.currentAge)
+        await setText(this.inputRetirementAge, dataJSON.retirementAge)
+        await setText(this.inputCurrentIncome, dataJSON.currentAnnualIncome)  
+        await setText(this.inputSpouseIncome, dataJSON.spouseAnnualIncome)
+        await setText(this.inputCurrTotalSavings, dataJSON.currentRetirementSavings)
+        await setText(this.inputCurrAnnualSavings, dataJSON.annualSavingsPercentage)
+        await setText(this.inputSavingsIncRate, dataJSON.savingsIncreaseRate)
+        
+        await click(this.radioSSBYes) 
+        
+        if( dataJSON.maritalStatus.toUpperCase() === MaritalStatus.MARRIED){
+            await waitForDisplayed(this.radioMarried)
+            await click(this.radioMarried)
+        } 
+        await waitForDisplayed(this.inputSSOveride)
+        await setText(this.inputSSOveride, dataJSON.socialSecOverrideAmt)
+        logger(this.LOG_IDENTIFIER + `Test data entry completed for the mandatory fields on the page 
+            with Social Security Benefits = Yes.`)
+    }
     
     //function to click on Calculate button
     //return type: void
@@ -138,7 +168,8 @@ class CalculatorPage extends Page{
         await this.waitForAlertRetireAgeGreater()
         logger(this.LOG_IDENTIFIER + `Waiting for ${await this.alertRetireAgeGreaterText.selector} to be displayed.`)
         await expectToExist(this.alertRetireAgeGreaterText)               
-    }
+    } 
+    
     
     //Default calculator dialog functions
     
@@ -164,6 +195,31 @@ class CalculatorPage extends Page{
         setText(this.inputPostRetireInvReturn, dataJSON.postRetireInvReturn) 
         
         this.clickBtnSaveChanges()
+        logger(this.LOG_IDENTIFIER + `Test data entry completed for the mandatory fields on the Default Calculator Values dialog.`)               
+    }
+
+    //function to fill all the values under the dialog to modify default calculator values including inflation 
+    //return type: void
+    async fillDefaultCalcValIncInflation(dataFile: string){
+        let dataJSON = parseJsonFile(dataFile)
+
+        logger(this.LOG_IDENTIFIER + `Test data captured from file: ` + dataFile)
+        logger(this.LOG_IDENTIFIER + `Test data entry started for the mandatory fields on the Default Calculator Values dialog.`)
+        await this.editDefaultCalcValues()
+        await this.waitForDefCalcDialogLoad()
+        await setText(this.inputAddlIncome, dataJSON.otherIncome)
+        await setText(this.inputRetDuration, dataJSON.yearsToDepend)
+
+        await setRadioBtn(this.radioIncludeInflation)
+
+        await waitForDisplayed(this.inputExpInflationRate)
+        await setText(this.inputExpInflationRate, dataJSON.expectedInflationRate)
+
+        await setText(this.inputRetAnnualIncome, dataJSON.finalIncomePostRetire)
+        await setText(this.inputPreRetireInvReturn, dataJSON.preRetireInvReturn)
+        await setText(this.inputPostRetireInvReturn, dataJSON.postRetireInvReturn)        
+        
+        await this.clickBtnSaveChanges()
         logger(this.LOG_IDENTIFIER + `Test data entry completed for the mandatory fields on the Default Calculator Values dialog.`)               
     }
 
