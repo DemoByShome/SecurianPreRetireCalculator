@@ -5,7 +5,7 @@ Feature: Calculate retirement savings using Securian Pre-retirement calculator
 
   @ScenarioP1
   Scenario: Calculate Retirement Savings
-    Given User fills up the form with or without "<Social Security Income>" & "<Marital Status>"
+    Given User fills up the form with or without "<Social Security Income>" & either of the "<Marital Status>"
     When User submits the form
     Then User should be able to see the retirement savings amount
 

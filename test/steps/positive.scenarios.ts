@@ -3,7 +3,7 @@ import CalculatorPage from '../../src/pages/calculator.page';
 import ResultsPage from '../../src/pages/results.page';
 import { DEFAULT_DATA_FILE } from '../../test/steps/constants/dataConstants';
 
-Given(`User fills up the form with or without {string} & {string}`, async (inclSocialSecurityOpt: string, maritalStatus: string) => {
+Given(`User fills up the form with or without {string} & either of the {string}`, async (inclSocialSecurityOpt: string, maritalStatus: string) => {
     await CalculatorPage.openPRCCalculator()
     await CalculatorPage.enterUserInfo(DEFAULT_DATA_FILE, inclSocialSecurityOpt, maritalStatus) 
 });
