@@ -1,0 +1,19 @@
+{
+    "currentAge":"40",
+    "retirementAge":"68",
+    "currentAnnualIncome":"1,00,000",
+    "spouseAnnualIncome":"75000",
+    "currentRetirementSavings":"5,00,000",
+    "annualSavingsPercentage":"10",
+    "savingsIncreaseRate":"1",
+    "socialSecBenefit": "No",
+    "maritalStatus": "",
+    "socialSecOverrideAmt": "",
+    "Adjust Default Calc Values": "No",
+	"otherIncome":"",
+    "yearsToDepend":"",
+    "finalIncomePostRetire":"",
+    "preRetireInvReturn":"",
+    "postRetireInvReturn":"",
+    "expectedInflationRate": ""
+}

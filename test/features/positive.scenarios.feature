@@ -1,44 +1,31 @@
 @positive_scenarios
 Feature: Calculate retirement savings using Securian Pre-retirement calculator
 
+  Background: User has opened the Securian Prer-Retirement Calculator on a browser's window
+
   @ScenarioP1
-  Scenario Outline: Calculate Retirement Savings
-    Given User fills all mandatory fields at the pre-retirement calculator from "<customerData>"
+  Scenario: Calculate Retirement Savings
+    Given User fills up the form with or without "<Social Security Income>" & "<Marital Status>"
     When User submits the form
-    Then User should be able to see my retirement savings amount
+    Then User should be able to see the retirement savings amount
 
     Examples:
-      | customerData         |
-      | basicUserInputs.json |
+      | Social Security Income | Marital Status |
+      | Exclude                | Single         |
+      | Include                | Single         |
+      | Include                | Married        |
 
   @ScenarioP2
-  Scenario Outline: Calculate Retirement Savings after adjusting default calculator values
-    Given User fills all mandatory fields at the pre-retirement calculator from "<customerData>"
-    And User modifies the default calculator values from "<defaultCalculatorInputs>"
+  Scenario: Calculate Retirement Savings w/o Social Security Option & by adjusting default calculator values
+    Given User fills up the form with or without "<Social Security Income>" & "<Marital Status>"
+    And User modifies the default calculator values with or without "<Inflation details>"
     When User submits the form
-    Then User should be able to see my retirement savings amount
+    Then User should be able to see the retirement savings amount
 
     Examples:
-      | customerData         | defaultCalculatorInputs |
-      | basicUserInputs.json | defCalValues.json       |
-
-  @ScenarioP3
-  Scenario Outline: Calculate Retirement Savings
-    Given User fills all mandatory fields at the pre-retirement calculator with social sucurity option from "<customerData>"
-    When User submits the form
-    Then User should be able to see my retirement savings amount
-
-    Examples:
-      | customerData              |
-      | userInputsWithSSBYes.json |
-
-  @ScenarioP4
-  Scenario Outline: Calculate Retirement Savings after adjusting default calculator values
-    Given User fills all mandatory fields at the pre-retirement calculator from "<customerData>"
-    And User modifies the default calculator values from "<defaultCalculatorInputs>" including Inflation details
-    When User submits the form
-    Then User should be able to see my retirement savings amount
-
-    Examples:
-      | customerData         | defaultCalculatorInputs   |
-      | basicUserInputs.json | defCalValuesWithInfl.json |
+      | Social Security Income | Marital Status | Inflation details |
+      | Exclude                | Single         | Exclude           |
+      | Exclude                | Single         | Include           |
+      | Include                | Married        | Exclude           |
+      | Include                | Single         | Include           |
+      | Include                | Married        | Include           |

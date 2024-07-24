@@ -2,6 +2,8 @@ import type { Options } from '@wdio/types'
 import { logger } from './src/utils/common'
 import * as os from "os";
 import { deleteDirectory } from './src/utils/fileUtils';
+import { FAILURE_SCREENSHOTS_FOLDER } from './test/steps/constants/pathConstants'
+import moment from 'moment'
 
 let LOG_IDENTIFIER = "WDIO_CONFIG:: ";
 
@@ -202,7 +204,8 @@ export const config: Options.Testrunner = {
      * @param {Array.<Object>} capabilities list of capabilities details
      */
     onPrepare: function () {
-        deleteDirectory('allure-results')        
+        deleteDirectory('allure-results')
+        deleteDirectory('screenshotsOnFailure/*')        
     },    
     /**
      * Gets executed before a worker process is spawned and can be used to initialize specific service
@@ -287,11 +290,16 @@ export const config: Options.Testrunner = {
      * @param {number}             result.duration  duration of scenario in milliseconds
      * @param {object}             context          Cucumber World object
      */
-    afterStep: async function (step, scenario, result) {
+    afterStep: async function (step, scenario, result, error) {
         if(!result.passed){
             await browser.takeScreenshot();
             logger(LOG_IDENTIFIER + "Secnario '"+ scenario.name + "'failed exection")
             logger(LOG_IDENTIFIER + "Step ID'" + step.id + "' failed")
+        }
+
+        if(error){
+            await browser.saveScreenshot(FAILURE_SCREENSHOTS_FOLDER 
+                + moment().format('DD-MMM-YYYY-HH-MM-SS') + '.jpg')
         }
     },
     /**

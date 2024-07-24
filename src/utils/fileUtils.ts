@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { logger } from '../utils/common'
 
+
 const LOG_IDENTIFIER = "FILE_UTILS:: "
 
 //function to capture data from a JSON file with user inputs & send the test data for input
@@ -12,7 +13,6 @@ export const parseJsonFile = (datapath:string)=> {
     logger(LOG_IDENTIFIER + "JSON:" + data)
     return JSON.parse(data)
 }
-
 
 export const deleteDirectory = (path: string)=> {
     if(fs.existsSync(path)) {

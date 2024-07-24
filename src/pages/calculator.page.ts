@@ -3,6 +3,9 @@ import Page from './page';
 import { setText, click, waitForDisplayed, expectToExist, logger, setRadioBtn } from '../utils/common';
 import { parseJsonFile } from '../utils/fileUtils'
 import { MaritalStatus } from '../enums/marital.status'
+import { InclusionFlag } from '../enums/inclusion.flag'
+import { RESOURCE_FOLDER } from '../../test/steps/constants/pathConstants';
+import { DEFAULT_DATA_FILE } from '../../test/steps/constants/dataConstants';
 
 class CalculatorPage extends Page{ 
 
@@ -76,48 +79,50 @@ class CalculatorPage extends Page{
 
     //function to enter values into the mandatiory fields of the calculator page
     //return type: void 
-    async enterUserInfo(customerDataFile: string){               
-        let dataJSON = parseJsonFile(customerDataFile)
-        logger(this.LOG_IDENTIFIER + `Test data captured from file: ` + customerDataFile)
-        logger(this.LOG_IDENTIFIER + `Test data entry started for the mandatory fields on the page.`)
+    async enterUserInfo(includeSocialSecIncome: string, maritalStatus: string){               
+        let dataJSON = parseJsonFile(RESOURCE_FOLDER + DEFAULT_DATA_FILE)
+        logger(this.LOG_IDENTIFIER + `Test data captured from file: ` + RESOURCE_FOLDER + DEFAULT_DATA_FILE)
+        logger(this.LOG_IDENTIFIER + `Test data entry started for the fields on the calculator page.`)
         await setText(this.inputCurrentAge, dataJSON.currentAge)
         await setText(this.inputRetirementAge, dataJSON.retirementAge)
         await setText(this.inputCurrentIncome, dataJSON.currentAnnualIncome)  
         await setText(this.inputSpouseIncome, dataJSON.spouseAnnualIncome)
         await setText(this.inputCurrTotalSavings, dataJSON.currentRetirementSavings)
         await setText(this.inputCurrAnnualSavings, dataJSON.annualSavingsPercentage)
-        await setText(this.inputSavingsIncRate, dataJSON.savingsIncreaseRate)           
+        await setText(this.inputSavingsIncRate, dataJSON.savingsIncreaseRate) 
+        if(includeSocialSecIncome.toUpperCase() == InclusionFlag.INCLUDE){ //include social security option
 
-        logger(this.LOG_IDENTIFIER + `Test data entry completed for the mandatory fields on the page.`)            
-    } 
+            await click(this.radioSSBYes)
 
-    /*function to enter values into the mandatiory fields of the calculator page 
-    with Social Security Benefits = Yes*/
-    //return type: void 
-    async enterUserInfoWithSSBenefit(customerDataFile: string){
-        let dataJSON = parseJsonFile(customerDataFile)
-        logger(this.LOG_IDENTIFIER + `Test data captured from file: ` + customerDataFile)
-        logger(this.LOG_IDENTIFIER + `Test data entry started for the mandatory fields on the page 
-            with Social Security Benefits = Yes.`)
-        await setText(this.inputCurrentAge, dataJSON.currentAge)
-        await setText(this.inputRetirementAge, dataJSON.retirementAge)
-        await setText(this.inputCurrentIncome, dataJSON.currentAnnualIncome)  
-        await setText(this.inputSpouseIncome, dataJSON.spouseAnnualIncome)
-        await setText(this.inputCurrTotalSavings, dataJSON.currentRetirementSavings)
-        await setText(this.inputCurrAnnualSavings, dataJSON.annualSavingsPercentage)
-        await setText(this.inputSavingsIncRate, dataJSON.savingsIncreaseRate)
-        
-        await click(this.radioSSBYes) 
-        
-        if( dataJSON.maritalStatus.toUpperCase() === MaritalStatus.MARRIED){
-            await waitForDisplayed(this.radioMarried)
-            await click(this.radioMarried)
-        } 
-        await waitForDisplayed(this.inputSSOveride)
-        await setText(this.inputSSOveride, dataJSON.socialSecOverrideAmt)
-        logger(this.LOG_IDENTIFIER + `Test data entry completed for the mandatory fields on the page 
-            with Social Security Benefits = Yes.`)
-    }
+            if(String(maritalStatus).toUpperCase() === MaritalStatus.MARRIED){
+                await waitForDisplayed(this.radioMarried)
+                await click(this.radioMarried)
+            }else{
+                logger(this.LOG_IDENTIFIER + "Continuing with Marital Status = 'Single'.")
+            }           
+
+            await waitForDisplayed(this.inputSSOveride)
+
+            if(dataJSON.socialSecOverrideAmt !== null || String(dataJSON.socialSecOverrideAmt).length !==0){
+                try{
+                    await setText(this.inputSSOveride, dataJSON.socialSecOverrideAmt)
+                }catch(error){
+                    await waitForDisplayed(this.inputSSOveride)
+                    await setText(this.inputSSOveride, dataJSON.socialSecOverrideAmt)
+                }
+                
+            }else{
+                logger(this.LOG_IDENTIFIER + "Continuing with no Social Security Override amount.")
+            } 
+
+            logger(this.LOG_IDENTIFIER + `Test data entry completed for the fields on the page 
+                with Social Security Benefits = Yes.`)           
+        }else if(includeSocialSecIncome.toUpperCase() == InclusionFlag.EXCLUDE){
+            logger(this.LOG_IDENTIFIER + "Continuing with no social security income option.")
+            logger(this.LOG_IDENTIFIER + `Test data entry completed for the fields on the page 
+                with Social Security Benefits = No.`)            
+        }                   
+    }   
     
     //function to click on Calculate button
     //return type: void
@@ -178,57 +183,44 @@ class CalculatorPage extends Page{
     async waitForDefCalcDialogLoad(){
         logger(this.LOG_IDENTIFIER + `Waiting for Dialog with fields for default calculator values to be displayed.`)
         waitForDisplayed(this.defCalcHeader)
-    }    
-
-    //function to fill all the values under the dialog to modify default calculator values
-    //return type: void
-    async fillDefaultCalcVal(dataFile: string){
-        let dataJSON = parseJsonFile(dataFile)
-        logger(this.LOG_IDENTIFIER + `Test data captured from file: ` + dataFile)
-        logger(this.LOG_IDENTIFIER + `Test data entry started for the mandatory fields on the Default Calculator Values dialog.`)
-        this.editDefaultCalcValues()
-        this.waitForDefCalcDialogLoad()
-        setText(this.inputAddlIncome, dataJSON.otherIncome)
-        setText(this.inputRetDuration, dataJSON.yearsToDepend)
-        setText(this.inputRetAnnualIncome, dataJSON.finalIncomePostRetire)
-        setText(this.inputPreRetireInvReturn, dataJSON.preRetireInvReturn)
-        setText(this.inputPostRetireInvReturn, dataJSON.postRetireInvReturn) 
-        
-        this.clickBtnSaveChanges()
-        logger(this.LOG_IDENTIFIER + `Test data entry completed for the mandatory fields on the Default Calculator Values dialog.`)               
     }
-
-    //function to fill all the values under the dialog to modify default calculator values including inflation 
-    //return type: void
-    async fillDefaultCalcValIncInflation(dataFile: string){
-        let dataJSON = parseJsonFile(dataFile)
-
-        logger(this.LOG_IDENTIFIER + `Test data captured from file: ` + dataFile)
-        logger(this.LOG_IDENTIFIER + `Test data entry started for the mandatory fields on the Default Calculator Values dialog.`)
-        await this.editDefaultCalcValues()
-        await this.waitForDefCalcDialogLoad()
-        await setText(this.inputAddlIncome, dataJSON.otherIncome)
-        await setText(this.inputRetDuration, dataJSON.yearsToDepend)
-
-        await setRadioBtn(this.radioIncludeInflation)
-
-        await waitForDisplayed(this.inputExpInflationRate)
-        await setText(this.inputExpInflationRate, dataJSON.expectedInflationRate)
-
-        await setText(this.inputRetAnnualIncome, dataJSON.finalIncomePostRetire)
-        await setText(this.inputPreRetireInvReturn, dataJSON.preRetireInvReturn)
-        await setText(this.inputPostRetireInvReturn, dataJSON.postRetireInvReturn)        
-        
-        await this.clickBtnSaveChanges()
-        logger(this.LOG_IDENTIFIER + `Test data entry completed for the mandatory fields on the Default Calculator Values dialog.`)               
-    }
-
+    
     //function to click on button Save Changes on the dialog to modify default calculator values
     //return type: void
     async clickBtnSaveChanges(){        
         click(this.btnSaveChanges)
         logger(this.LOG_IDENTIFIER + `Clicked on element: ${await this.btnSaveChanges.selector}`)
     }
+
+    //function to fill all the values under the dialog to modify default calculator values
+    //return type: void
+    async fillDefaultCalcVal(inclInflationDetails: string){
+        let dataJSON = parseJsonFile(RESOURCE_FOLDER + DEFAULT_DATA_FILE)
+        logger(this.LOG_IDENTIFIER + `Test data captured from file: ` + RESOURCE_FOLDER + DEFAULT_DATA_FILE)
+        logger(this.LOG_IDENTIFIER + `Test data entry started for the fields on the Default Calculator Values dialog.`)
+        this.editDefaultCalcValues()
+        this.waitForDefCalcDialogLoad()
+        setText(this.inputAddlIncome, dataJSON.otherIncome)
+        setText(this.inputRetDuration, dataJSON.yearsToDepend)
+
+        if(inclInflationDetails.toUpperCase() == InclusionFlag.INCLUDE){
+            await setRadioBtn(this.radioIncludeInflation)
+
+            await waitForDisplayed(this.inputExpInflationRate)
+            await setText(this.inputExpInflationRate, dataJSON.expectedInflationRate)
+        }else{
+            logger(this.LOG_IDENTIFIER + "Continuing with no inflation details on the default calculator")
+        }      
+
+        setText(this.inputRetAnnualIncome, dataJSON.finalIncomePostRetire)
+        setText(this.inputPreRetireInvReturn, dataJSON.preRetireInvReturn)
+        setText(this.inputPostRetireInvReturn, dataJSON.postRetireInvReturn) 
+        
+        this.clickBtnSaveChanges()
+        logger(this.LOG_IDENTIFIER + `Test data entry completed for the fields on the Default Calculator Values dialog.`)               
+    }
+
+    
 
     //defaults inherited functions
 
