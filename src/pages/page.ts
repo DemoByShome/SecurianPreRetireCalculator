@@ -25,7 +25,8 @@ export default class Page{
     async openPRCCalculator(){
         logger(this.LOG_IDENTIFIER + `Loading Securian Pre-retirement calculation for testing`)
         await this.maximizeBrowserWindow()
-        await this.refreshBrowser()                    
+        await this.refreshBrowser()
+        await this.deleteBrowserCookies()                   
         return (await browser.url(this.pageUrl))       
     }
 
@@ -48,5 +49,12 @@ export default class Page{
     async closeBrowserWindow(){
         await browser.closeWindow()
         logger(this.LOG_IDENTIFIER + `Closed the browser window.`) 
+    }
+
+    //function to delete all cookies
+    //return type: void
+    async deleteBrowserCookies(){
+        browser.deleteAllCookies
+        logger(this.LOG_IDENTIFIER + `Delete all cookies from the browser`) 
     }
 }

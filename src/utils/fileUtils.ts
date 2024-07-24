@@ -16,7 +16,14 @@ export const parseJsonFile = (datapath:string)=> {
 
 export const deleteDirectory = (path: string)=> {
     if(fs.existsSync(path)) {
-        fs.rmdirSync(path, {recursive: true})
+        fs.rmdirSync(path, {recursive: true})        
         logger(LOG_IDENTIFIER + `Directory Deleted: ${path}`)
     }
+}
+
+export const createDirectory = (path: string)=> {
+    if(!fs.existsSync(path)){
+        fs.mkdirSync(path)
+    }
+    logger(LOG_IDENTIFIER + `Directory Created: ${path}`)
 }

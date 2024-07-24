@@ -1,7 +1,7 @@
 import type { Options } from '@wdio/types'
 import { logger } from './src/utils/common'
 import * as os from "os";
-import { deleteDirectory } from './src/utils/fileUtils';
+import { deleteDirectory, createDirectory } from './src/utils/fileUtils';
 import { FAILURE_SCREENSHOTS_FOLDER } from './test/steps/constants/pathConstants'
 import moment from 'moment'
 
@@ -39,9 +39,9 @@ export const config: Options.Testrunner = {
     //
     specs: [
         // ToDo: define location for spec files here
-        './test/features/positive.scenarios.feature'
+        //'./test/features/positive.scenarios.feature'
         //'./test/features/negative.scenarios.feature'
-        //'./test/features/*.scenarios.feature'
+        './test/features/*.scenarios.feature'
     ],
     // Patterns to exclude.
     exclude: [
@@ -163,8 +163,8 @@ export const config: Options.Testrunner = {
     cucumberOpts: {
         // <string[]> (file/dir) require files before executing features
         //require: ['./test/steps/negative.scenarios.ts'],
-        require: ['./test/steps/positive.scenarios.ts'],
-        //require: ['./test/steps/*.scenarios.ts'],
+        //require: ['./test/steps/positive.scenarios.ts'],
+        require: ['./test/steps/*.scenarios.ts'],
         // <boolean> show full backtrace for errors
         backtrace: false,
         // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
@@ -205,7 +205,8 @@ export const config: Options.Testrunner = {
      */
     onPrepare: function () {
         deleteDirectory('allure-results')
-        deleteDirectory('screenshotsOnFailure/*')        
+        deleteDirectory('screenshotsOnFailure')
+        createDirectory('screenshotsOnFailure')        
     },    
     /**
      * Gets executed before a worker process is spawned and can be used to initialize specific service
@@ -299,7 +300,7 @@ export const config: Options.Testrunner = {
 
         if(error){
             await browser.saveScreenshot(FAILURE_SCREENSHOTS_FOLDER 
-                + moment().format('DD-MMM-YYYY-HH-MM-SS') + '.jpg')
+                + moment().format('DD-MMM-YYYY-HH-MM-SS') + '.png')
         }
     },
     /**

@@ -10,7 +10,7 @@ export const logger = (input: string) => {
 
 export const click = async(elem: ChainablePromiseElement<WebdriverIO.Element>) => {
     await waitForClickable(elem)
-    await elem.click()
+    await elem.click()    
     logger(LOG_IDENTIFIER + `Clicked on element: ${await elem.selector}`)
 }
 
@@ -27,6 +27,20 @@ export const setRadioBtn = async(elem: ChainablePromiseElement<WebdriverIO.Eleme
 export const setText = async(elem: ChainablePromiseElement<WebdriverIO.Element>, text: string) => {        
     await elem.click()
     await elem.addValue(text)    
+    logger(LOG_IDENTIFIER + `Entered value ${text} into Webelemnt ${await elem.selector}`)    
+}
+
+export const addText = async(elem: ChainablePromiseElement<WebdriverIO.Element>, text: string) => {     
+    try{
+        await elem.addValue(text) 
+    }catch(error){
+        if(error instanceof Error){
+            await elem.waitForDisplayed({timeout: 10000})
+            await elem.waitForEnabled({timeout: 10000})
+            await elem.addValue(text)
+        }        
+    }
+       
     logger(LOG_IDENTIFIER + `Entered value ${text} into Webelemnt ${await elem.selector}`)    
 }
 
