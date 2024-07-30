@@ -162,8 +162,8 @@ export const config: Options.Testrunner = {
     // If you are using Cucumber you need to specify the location of your step definitions.
     cucumberOpts: {
         // <string[]> (file/dir) require files before executing features
-        //require: ['./test/steps/negative.scenarios.ts'],
         //require: ['./test/steps/positive.scenarios.ts'],
+        //require: ['./test/steps/negative.scenarios.ts'],        
         require: ['./test/steps/*.scenarios.ts'],
         // <boolean> show full backtrace for errors
         backtrace: false,

@@ -1,4 +1,4 @@
 export enum InclusionFlag {
-    EXCLUDE = "EXCLUDE",
-    INCLUDE = "INCLUDE"
+    EXCLUDED = "EXCLUDED",
+    INCLUDED = "INCLUDED"
 }

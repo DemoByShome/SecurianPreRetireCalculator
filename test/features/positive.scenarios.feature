@@ -5,27 +5,27 @@ Feature: Calculate retirement savings using Securian Pre-retirement calculator
 
   @ScenarioP1
   Scenario: Calculate Retirement Savings
-    Given User fills up the form with or without "<Social Security Income>" & either of the "<Marital Status>"
+    Given User fills up the form with Social Security Income as "<Included/Excluded>" & Marital Status as "<Single/Married>"
     When User submits the form
     Then User should be able to see the retirement savings amount
 
     Examples:
       | Social Security Income | Marital Status |
-      | Exclude                | Single         |
-      | Include                | Single         |
-      | Include                | Married        |
+      | Excluded               | Single         |
+      | Included               | Single         |
+      | Included               | Married        |
 
   @ScenarioP2
   Scenario: Calculate Retirement Savings w/o Social Security Option & by adjusting default calculator values
-    Given User fills up the form with or without "<Social Security Income>" & "<Marital Status>"
-    And User modifies the default calculator values with or without "<Inflation details>"
+    Given User fills up the form with Social Security Income as "<Included/Excluded>" & Marital Status as "<Single/Married>"
+    And User modifies the default calculator values with Inflation details as "<Included/Excluded>"
     When User submits the form
     Then User should be able to see the retirement savings amount
 
     Examples:
       | Social Security Income | Marital Status | Inflation details |
-      | Exclude                | Single         | Exclude           |
-      | Exclude                | Single         | Include           |
-      | Include                | Married        | Exclude           |
-      | Include                | Single         | Include           |
-      | Include                | Married        | Include           |
+      | Excluded               | Single         | Excluded          |
+      | Excluded               | Single         | Included          |
+      | Included               | Married        | Excluded          |
+      | Included               | Single         | Included          |
+      | Included               | Married        | Included          |

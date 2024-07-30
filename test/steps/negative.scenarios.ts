@@ -1,11 +1,9 @@
 import { Given, When, Then } from '@wdio/cucumber-framework';
 import CalculatorPage from '../../src/pages/calculator.page';
-import { NEGATIVE_SC1_DATA_FILE, NEGATIVE_SC2_DATA_FILE } from '../../test/steps/constants/dataConstants';
-
 
 Given(`User fills up the form with string values for numeric fields`, async () => {
     CalculatorPage.openPRCCalculator()
-    CalculatorPage.enterUserInfo(NEGATIVE_SC1_DATA_FILE, "", "")
+    CalculatorPage.enterTextForMandatoryFields()
 });
 
 When(`User submits the form`, async () => {
@@ -24,5 +22,5 @@ Then(`User will get error message as planned retirement age must be greater than
 
 Given(`User fills up the form with current age greater than retirement age`, async () => {
     CalculatorPage.openPRCCalculator()
-    CalculatorPage.enterUserInfo(NEGATIVE_SC2_DATA_FILE, "", "")
+    CalculatorPage.enterLessRetAgeForMandatoryFields()
 });

@@ -29,10 +29,12 @@ class ResultsPage extends Page{
     async waitTillResultDisplayed(){                
         (await this.pageh3).waitForExist({timeout:10000})
         await waitForDisplayed(this.pageh3)
+
         await waitTillDisappear(this.paraSpinnerText)
-        //await waitForDisplayed(this.paraResultMessage)
+        
         await waitForDisplayed(this.plotMonthlySavings)
         await waitForDisplayed(this.tdRetirementSavingsAmt)
+        
         logger(this.LOG_IDENTIFIER + `The Retirement Calculation Results are now available on the Results Page.`)
     }
        

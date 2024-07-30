@@ -1,10 +1,12 @@
 import { $ } from '@wdio/globals'
 import Page from './page';
 import { setText, addText, click, waitForDisplayed, expectToExist, logger, setRadioBtn } from '../utils/common';
-import { parseJsonFile } from '../utils/fileUtils'
 import { MaritalStatus } from '../enums/marital.status'
 import { InclusionFlag } from '../enums/inclusion.flag'
 import { RESOURCE_FOLDER } from '../../test/steps/constants/pathConstants';
+import { USER_DATA_FILE } from '../../test/steps/constants/dataConstants';
+import { userData } from '../../resources/userData'
+
 
 class CalculatorPage extends Page{ 
 
@@ -78,60 +80,106 @@ class CalculatorPage extends Page{
 
     //function to enter values into the mandatiory fields of the calculator page
     //return type: void 
-    async enterUserInfo(dataFile: string, includeSocialSecIncome: string, maritalStatus: string){                      
-        let dataJSON = parseJsonFile(RESOURCE_FOLDER + dataFile)
-        logger(this.LOG_IDENTIFIER + `Test data captured from file: ` + RESOURCE_FOLDER + dataFile)
+    async enterUserInfo(includeSocialSecIncome?: string, maritalStatus?: string){                      
+        logger(this.LOG_IDENTIFIER + `Test data captured from file: ` + RESOURCE_FOLDER + USER_DATA_FILE)
         logger(this.LOG_IDENTIFIER + `Test data entry started for the fields on the calculator page.`)
 
         this.validatePageLoad()        
         try{
-            await setText(this.inputCurrentAge, dataJSON.currentAge)
+            await setText(this.inputCurrentAge, userData.mandatoryFields.currentAge)
         }catch(error){
             if(error instanceof Error){
-                addText(this.inputCurrentAge, dataJSON.currentAge)
+                addText(this.inputCurrentAge, userData.mandatoryFields.currentAge)
             }
         }
-        await setText(this.inputRetirementAge, dataJSON.retirementAge)
-        await setText(this.inputCurrentIncome, dataJSON.currentAnnualIncome)  
-        await setText(this.inputSpouseIncome, dataJSON.spouseAnnualIncome)
-        await setText(this.inputCurrTotalSavings, dataJSON.currentRetirementSavings)
-        await setText(this.inputCurrAnnualSavings, dataJSON.annualSavingsPercentage)
-        await setText(this.inputSavingsIncRate, dataJSON.savingsIncreaseRate) 
-        
-        if(includeSocialSecIncome.length > 0 && includeSocialSecIncome.toUpperCase() == InclusionFlag.INCLUDE){ //include social security option
+        await setText(this.inputRetirementAge, userData.mandatoryFields.retirementAge)
+        await setText(this.inputCurrentIncome, userData.mandatoryFields.currentAnnualIncome)  
+        await setText(this.inputSpouseIncome, userData.mandatoryFields.spouseAnnualIncome)
+        await setText(this.inputCurrTotalSavings, userData.mandatoryFields.currentRetirementSavings)
+        await setText(this.inputCurrAnnualSavings, userData.mandatoryFields.annualSavingsPercentage)
+        await setText(this.inputSavingsIncRate, userData.mandatoryFields.savingsIncreaseRate)
+        if(typeof(includeSocialSecIncome) !== undefined){
+            if(String(includeSocialSecIncome).toUpperCase() == InclusionFlag.INCLUDED){ //include social security option
 
-            await click(this.radioSSBYes)
-    
-            if(maritalStatus.length > 0 && maritalStatus.toUpperCase() === MaritalStatus.MARRIED){
-                await waitForDisplayed(this.radioMarried)
-                await click(this.radioMarried)
-            }else{
-                logger(this.LOG_IDENTIFIER + "Continuing with Marital Status = 'Single'.")
-            }           
-    
-            await waitForDisplayed(this.inputSSOveride)
-    
-            if(dataJSON.socialSecOverrideAmt !== null || String(dataJSON.socialSecOverrideAmt).length !==0){
-                try{
-                    await setText(this.inputSSOveride, dataJSON.socialSecOverrideAmt)
-                }catch(error){
-                    await waitForDisplayed(this.inputSSOveride)
-                    await setText(this.inputSSOveride, dataJSON.socialSecOverrideAmt)
+                await click(this.radioSSBYes)
+                
+                if(typeof(maritalStatus) !== undefined){
+                    if(String(maritalStatus).toUpperCase() === MaritalStatus.MARRIED){
+                        await waitForDisplayed(this.radioMarried)
+                        await click(this.radioMarried)
+                    }else{
+                        logger(this.LOG_IDENTIFIER + "Continuing with Marital Status = 'Single'.")
+                    }
+                }else{
+                    logger(this.LOG_IDENTIFIER + "Continuing with Marital Status = 'Single'.")
                 }
-                    
-            }else{
-                logger(this.LOG_IDENTIFIER + "Continuing with no Social Security Override amount.")
+                           
+        
+                await waitForDisplayed(this.inputSSOveride)
+        
+                if(userData.socialSecIncomeFields.socialSecOverrideAmt !== null || String(userData.socialSecIncomeFields.socialSecOverrideAmt).length !==0){
+                    try{
+                        await setText(this.inputSSOveride, userData.socialSecIncomeFields.socialSecOverrideAmt)
+                    }catch(error){
+                        await waitForDisplayed(this.inputSSOveride)
+                        await setText(this.inputSSOveride, userData.socialSecIncomeFields.socialSecOverrideAmt)
+                    }                        
+                }else{
+                    logger(this.LOG_IDENTIFIER + "Continuing with no Social Security Override amount.")
+                } 
+        
+                logger(this.LOG_IDENTIFIER + `Test data entry completed for the fields on the page 
+                    with Social Security Benefits = Yes.`)           
+            }else if(String(includeSocialSecIncome).toUpperCase() == InclusionFlag.EXCLUDED){
+                logger(this.LOG_IDENTIFIER + "Continuing with no social security income option.")
+                logger(this.LOG_IDENTIFIER + `Test data entry completed for the fields on the page 
+                    with Social Security Benefits = No.`)            
             } 
-    
-            logger(this.LOG_IDENTIFIER + `Test data entry completed for the fields on the page 
-                with Social Security Benefits = Yes.`)           
-        }else if(includeSocialSecIncome.toUpperCase() == InclusionFlag.EXCLUDE){
+        } else{
             logger(this.LOG_IDENTIFIER + "Continuing with no social security income option.")
             logger(this.LOG_IDENTIFIER + `Test data entry completed for the fields on the page 
-                with Social Security Benefits = No.`)            
-        }       
-                           
-    }   
+                    with Social Security Benefits = No.`) 
+        }    
+    } 
+
+    //function to enter only text values into the mandatiory fields of the calculator page
+    //return type: void 
+    async enterTextForMandatoryFields(){                      
+        logger(this.LOG_IDENTIFIER + `Test data captured from file: ` + RESOURCE_FOLDER + USER_DATA_FILE)
+        logger(this.LOG_IDENTIFIER + `Test data entry started for the fields on the calculator page.`)
+
+        this.validatePageLoad()        
+        
+        await addText(this.inputCurrentAge, userData.negativeSC1Fields.currentAge)
+        await addText(this.inputRetirementAge, userData.negativeSC1Fields.retirementAge)    
+        await setText(this.inputCurrentIncome, userData.negativeSC1Fields.currentAnnualIncome)  
+        await setText(this.inputSpouseIncome, userData.negativeSC1Fields.spouseAnnualIncome)
+        await setText(this.inputCurrTotalSavings, userData.negativeSC1Fields.currentRetirementSavings)
+        await setText(this.inputCurrAnnualSavings, userData.negativeSC1Fields.annualSavingsPercentage)
+        await setText(this.inputSavingsIncRate, userData.negativeSC1Fields.savingsIncreaseRate)            
+    }
+
+    //function to enter current age greater than retirement age into the mandatiory fields of the calculator page
+    //return type: void 
+    async enterLessRetAgeForMandatoryFields(){                      
+        logger(this.LOG_IDENTIFIER + `Test data captured from file: ` + RESOURCE_FOLDER + USER_DATA_FILE)
+        logger(this.LOG_IDENTIFIER + `Test data entry started for the fields on the calculator page.`)
+
+        this.validatePageLoad()        
+        try{
+            await setText(this.inputCurrentAge, userData.negativeSC2Fields.currentAge)
+        }catch(error){
+            if(error instanceof Error){
+                addText(this.inputCurrentAge, userData.negativeSC2Fields.currentAge)
+            }
+        }
+        await setText(this.inputRetirementAge, userData.negativeSC2Fields.retirementAge)
+        await setText(this.inputCurrentIncome, userData.mandatoryFields.currentAnnualIncome)  
+        await setText(this.inputSpouseIncome, userData.mandatoryFields.spouseAnnualIncome)
+        await setText(this.inputCurrTotalSavings, userData.mandatoryFields.currentRetirementSavings)
+        await setText(this.inputCurrAnnualSavings, userData.mandatoryFields.annualSavingsPercentage)
+        await setText(this.inputSavingsIncRate, userData.mandatoryFields.savingsIncreaseRate)            
+    }
     
     //function to click on Calculate button
     //return type: void
@@ -203,27 +251,26 @@ class CalculatorPage extends Page{
 
     //function to fill all the values under the dialog to modify default calculator values
     //return type: void
-    async fillDefaultCalcVal(dataFile: string, inclInflationDetails: string){
-        let dataJSON = parseJsonFile(RESOURCE_FOLDER + dataFile)
-        logger(this.LOG_IDENTIFIER + `Test data captured from file: ` + RESOURCE_FOLDER + dataFile)
+    async fillDefaultCalcVal(inclInflationDetails: string){        
+        logger(this.LOG_IDENTIFIER + `Test data captured from file: ` + RESOURCE_FOLDER + USER_DATA_FILE)
         logger(this.LOG_IDENTIFIER + `Test data entry started for the fields on the Default Calculator Values dialog.`)
         this.editDefaultCalcValues()
         this.waitForDefCalcDialogLoad()
-        setText(this.inputAddlIncome, dataJSON.otherIncome)
-        setText(this.inputRetDuration, dataJSON.yearsToDepend)
+        setText(this.inputAddlIncome, userData.defaultCalcValues.otherIncome)
+        setText(this.inputRetDuration, userData.defaultCalcValues.yearsToDepend)
 
-        if(inclInflationDetails.toUpperCase() == InclusionFlag.INCLUDE){
+        if(inclInflationDetails.toUpperCase() == InclusionFlag.INCLUDED){
             await setRadioBtn(this.radioIncludeInflation)
 
             await waitForDisplayed(this.inputExpInflationRate)
-            await setText(this.inputExpInflationRate, dataJSON.expectedInflationRate)
+            await setText(this.inputExpInflationRate, userData.defCalcInflationFields.expectedInflationRate)
         }else{
             logger(this.LOG_IDENTIFIER + "Continuing with no inflation details on the default calculator")
         }      
 
-        setText(this.inputRetAnnualIncome, dataJSON.finalIncomePostRetire)
-        setText(this.inputPreRetireInvReturn, dataJSON.preRetireInvReturn)
-        setText(this.inputPostRetireInvReturn, dataJSON.postRetireInvReturn) 
+        setText(this.inputRetAnnualIncome, userData.defaultCalcValues.finalIncomePostRetire)
+        setText(this.inputPreRetireInvReturn, userData.defaultCalcValues.preRetireInvReturn)
+        setText(this.inputPostRetireInvReturn, userData.defaultCalcValues.postRetireInvReturn) 
         
         this.clickBtnSaveChanges()
         logger(this.LOG_IDENTIFIER + `Test data entry completed for the fields on the Default Calculator Values dialog.`)               
