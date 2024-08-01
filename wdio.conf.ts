@@ -43,7 +43,7 @@ export const config: Options.Testrunner = {
         //'./test/features/negative.scenarios.feature'
         './test/features/*.scenarios.feature'
     ],
-    // Patterns to exclude.
+    // Patterns to exclude
     exclude: [
         // 'path/to/excluded/files'
     ],
@@ -164,7 +164,7 @@ export const config: Options.Testrunner = {
         // <string[]> (file/dir) require files before executing features
         //require: ['./test/steps/positive.scenarios.ts'],
         //require: ['./test/steps/negative.scenarios.ts'],        
-        require: ['./test/steps/*.scenarios.ts'],
+        require: ['./test/steps/steps.ts'],
         // <boolean> show full backtrace for errors
         backtrace: false,
         // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)

@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "wdio": "wdio run ./wdio.conf.ts",
-    "positive_scenarios": "npx wdio ./wdio.conf.ts --suite positive_scenarios --cucumberOpts:require './test/steps/positive.scenarios.ts'",
-    "negative_scenarios": "npx wdio ./wdio.conf.ts --suite negative_scenarios --cucumberOpts:require './test/steps/negative.scenarios.ts'",
+    "wdio": "wdio run ./wdio.conf.ts",    
     "generate_report": "allure generate allure-results --clean",
+    "positive_scenarios": "npx wdio ./wdio.conf.ts --suite positive_scenarios",
+    "negative_scenarios": "npx wdio ./wdio.conf.ts --suite negative_scenarios",
     "launch_report": "allure open"
   },
   "keywords": [

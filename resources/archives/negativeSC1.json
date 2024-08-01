@@ -1,9 +1,0 @@
-{
-    "currentAge":"text",
-    "retirementAge":"text",
-    "currentAnnualIncome":"text",
-    "spouseAnnualIncome":"text",
-    "currentRetirementSavings":"text",
-    "annualSavingsPercentage":"text",
-    "savingsIncreaseRate":"text"
-}

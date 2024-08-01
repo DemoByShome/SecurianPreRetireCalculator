@@ -37,7 +37,7 @@ class CalculatorPage extends Page{
     get radioMarried() { return $('//ul[@id="marital-status-ul"]/li/label[@for="married"]')  }
 
     //Buttons on the page
-    get btnCalculate() { return $('//button[text()="Calculate"]') }
+    get btnCalculate() { return $('//button[text()="Calculate"]') }    
     get btnClearForm() { return $('//button[text()="Clear form"]') }
 
     //Links on the page 
@@ -51,7 +51,7 @@ class CalculatorPage extends Page{
     get alertFillAllDataText() { return $('//div[@id="calculator-input-alert"]/p[text()="Please fill out all required fields"]')  }
     get alertRetireAgeGreaterText() { return $('//input[@id="retirement-age"]//parent::div/div/span[text()="Planned retirement age must be greater than current age"]')}
 
-    //expectedAlertFillDataText = "Please fill out all required fields"
+    //Expected Alerts
     expectedRetireAgeAlertText = "Planned retirement age must be greater than current age"
 
 
@@ -85,14 +85,9 @@ class CalculatorPage extends Page{
         logger(this.LOG_IDENTIFIER + `Test data entry started for the fields on the calculator page.`)
 
         this.validatePageLoad()        
-        try{
-            await setText(this.inputCurrentAge, userData.mandatoryFields.currentAge)
-        }catch(error){
-            if(error instanceof Error){
-                addText(this.inputCurrentAge, userData.mandatoryFields.currentAge)
-            }
-        }
-        await setText(this.inputRetirementAge, userData.mandatoryFields.retirementAge)
+        
+        await addText(this.inputCurrentAge, userData.mandatoryFields.currentAge)
+        await addText(this.inputRetirementAge, userData.mandatoryFields.retirementAge)
         await setText(this.inputCurrentIncome, userData.mandatoryFields.currentAnnualIncome)  
         await setText(this.inputSpouseIncome, userData.mandatoryFields.spouseAnnualIncome)
         await setText(this.inputCurrTotalSavings, userData.mandatoryFields.currentRetirementSavings)
@@ -165,14 +160,9 @@ class CalculatorPage extends Page{
         logger(this.LOG_IDENTIFIER + `Test data captured from file: ` + RESOURCE_FOLDER + USER_DATA_FILE)
         logger(this.LOG_IDENTIFIER + `Test data entry started for the fields on the calculator page.`)
 
-        this.validatePageLoad()        
-        try{
-            await setText(this.inputCurrentAge, userData.negativeSC2Fields.currentAge)
-        }catch(error){
-            if(error instanceof Error){
-                addText(this.inputCurrentAge, userData.negativeSC2Fields.currentAge)
-            }
-        }
+        this.validatePageLoad()       
+
+        await addText(this.inputCurrentAge, userData.negativeSC2Fields.currentAge)
         await setText(this.inputRetirementAge, userData.negativeSC2Fields.retirementAge)
         await setText(this.inputCurrentIncome, userData.mandatoryFields.currentAnnualIncome)  
         await setText(this.inputSpouseIncome, userData.mandatoryFields.spouseAnnualIncome)

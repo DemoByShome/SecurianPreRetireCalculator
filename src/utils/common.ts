@@ -71,8 +71,7 @@ export const waitTillDisappear = async(elem: ChainablePromiseElement<WebdriverIO
         logger(LOG_IDENTIFIER + `Webelement ${await elem.selector} is now displayed.`)  
     }else{
         logger(LOG_IDENTIFIER + `Webelement ${await elem.selector} is not present on the page or has already disappeared`)  
-    }
-    
+    }    
 }
 
 export const expectToExist = async(elem: ChainablePromiseElement<WebdriverIO.Element>) =>{
